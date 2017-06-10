@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>task001</title>
+</head>
+<body>
+<label>请输入北京今天的空气质量:<input id="aqi-input"type="text"/></label>
+<button id="button">确认填写</button>
+<div>您输入的值是:<span id="aqi-display">尚无录入</span></div>
+<script type="text/javascript">
+    (function(){
+
+        //处理浏览器事件兼容性
+        var EventUtil = {
+            addEventHandler:function(element,type,handler){
+                if(element.addEventListener){
+                    element.addEventListener(type,handler,false);
+                }else if(element.attachEvent){
+                    element.attachEvent("on"+type,handler);
+                }else{
+                    element["on"+type]=handler;
+                }
+            },
+            removeEventHandler:function(element,type,handler){
+                if(element.removeEventListener){
+                    element.removeEventListener(type,handler,false);
+                }else if(element.detachEvent){
+                    element.detachEvent("on"+type,handler);
+                }else{
+                    element["on"+type]=null;
+                }
+            }
+        };
+
+        //缓存dom操作，减少开销
+        var button = document.getElementById("button");
+        var aqi_input = document.getElementById("aqi-input");
+        var aqi_display = document.getElementById("aqi-display");
+
+        EventUtil.addEventHandler(button,"click",function(){
+            //检查是否合法数据
+            var text = parseInt(aqi_input.value);
+            //根据具体业务场景设定合理边界值
+            if(!isNaN(text)&&text>0&&text<500){
+                aqi_display.innerHTML = text;
+            }else{
+                alert("请您输入0-500之间的合法值！")
+            }
+
+        });
+
+        //猜测用户习惯
+        aqi_input.onkeyup = function(){
+            var event = event || window.event;
+            if(event.keyCode == 13){
+                button.click();
+            }
+        }
+    })();
+</script>
+</body>
+</html>
